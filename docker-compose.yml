@@ -1,0 +1,55 @@
+version: '3.4'
+services:
+
+  rasa:
+    image: rasa-server-okteto:latest
+    working_dir: /app
+    build: './'
+    restart: always
+    volumes:
+    - ./actions:/app/actions
+    - ./data:/app/data
+    - ./tests:/app/tests
+    command: bash -c "rm -rf models/* && rasa train && rasa run --enable-api --cors \"*\" --debug"
+    ports:
+    - '5006:5005'
+    depends_on:
+    - rasa-actions
+    public: true
+    env_file: .env
+    networks:
+    - all
+
+  rasa-actions:
+    image: rasa-server-okteto:latest
+    working_dir: /app
+    build: './'
+    restart: always
+    volumes:
+    - ./actions:/app/actions
+    command: bash -c "rasa run actions"
+    ports:
+    - '5055:5055'
+    env_file: .env
+    networks:
+    - all
+
+  rabbit:
+    restart: always
+    image: "bitnami/rabbitmq:3.7.17"
+    environment:
+      RABBITMQ_HOST: "rabbit"
+      RABBITMQ_USERNAME: "user"
+      RABBITMQ_PASSWORD: user123
+      RABBITMQ_DISK_FREE_LIMIT: "{mem_relative, 0.1}"
+    expose:
+      - "5672"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+networks:
+  all:
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable.ipv6: "true"
