@@ -48,6 +48,7 @@ services:
       - "5672:5672"
       - "15672:15672"
 
+<<<<<<< HEAD
   elasticsearch:
 <<<<<<< HEAD
     build:
@@ -97,6 +98,8 @@ services:
       - elasticsearch
 
   
+=======
+>>>>>>> ffff9265347360bbaa3a90617414b42c19fef046
 
 networks:
   all:
@@ -104,5 +107,4 @@ networks:
     driver_opts:
       com.docker.network.enable.ipv6: "true"
   
-  elk:
-    driver:bridge
+  
