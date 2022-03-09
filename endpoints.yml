@@ -40,6 +40,8 @@ event_broker:
   url: rabbit
   username: user
   password: user123
-  queue: elk_log
+  queue: rasa_core_events
+  
+  #elk_log
     
     
